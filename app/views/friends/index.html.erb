@@ -31,3 +31,10 @@
 <br>
 
 <%= link_to 'New Friend', new_friend_path %>
+
+<h1>Import CSV</h1>
+
+<%= form_tag('/friends/import_csv', method: 'post', multipart: true) do %>
+  <%= file_field_tag :csv %>
+  <%= submit_tag 'Import CSV' %>
+<% end %>
