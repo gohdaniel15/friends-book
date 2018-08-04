@@ -1,4 +1,5 @@
 class FriendsController < ApplicationController
+  
   # GET /friends
   def index
     @friends = Friend.all
@@ -48,7 +49,22 @@ class FriendsController < ApplicationController
     @friend.destroy
     redirect_to friends_url, notice: 'Friend was successfully destroyed.'
   end
-
+  
+  def import_csv
+    file_name = params[:csv].tempfile
+    
+    CSV.foreach(file_name, headers: true) do |row|
+      first_name = row['first_name']
+      last_name = row['last_name']
+      date_of_birth = row['date_of_birth']
+      email = row['email']
+      
+      Friend.create(first_name: first_name, last_name: last_name, date_of_birth: Date.parse(date_of_birth), email: email)
+    end
+    
+    redirect_to friends_url
+  end
+  
   private
 
   # Never trust parameters from the scary internet, only allow the white list through.
